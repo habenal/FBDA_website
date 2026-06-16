@@ -36,16 +36,21 @@ const pillars = [
 
 export default function PillarsOfImpact() {
   return (
-    <section id="pillars" className="bg-white py-20 md:py-24 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 uppercase text-center tracking-tight mb-12 md:mb-16">
-          Pillars of Impact
-        </h2>
+    <section id="pillars" className="bg-white py-24 md:py-32 overflow-hidden relative">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="text-center mb-14 md:mb-20">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 uppercase tracking-tight leading-tight mb-4">
+            Pillars of Impact
+          </h2>
+          <div className="flex justify-center">
+            <div className="h-1.5 w-16" style={{ background: '#E8A800' }} />
+          </div>
+        </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-10 lg:gap-12">
+        <div className="flex flex-col xl:flex-row items-center gap-12 xl:gap-16">
           <Reveal>
-            <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 flex-shrink-0">
-              <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-lg">
+            <div className="w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 flex-shrink-0">
+              <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
                 <path d="M 100,10 A 90,90 0 0,1 185.6,72.2 L 152.3,83.0 A 55,55 0 0,0 100,45 Z" fill="#4A6B10" />
                 <path d="M 185.6,72.2 A 90,90 0 0,1 152.9,172.8 L 132.3,144.5 A 55,55 0 0,0 152.3,83.0 Z" fill="#6B9C1F" />
                 <path d="M 152.9,172.8 A 90,90 0 0,1 47.1,172.8 L 67.7,144.5 A 55,55 0 0,0 132.3,144.5 Z" fill="#8AB82E" />
@@ -58,23 +63,25 @@ export default function PillarsOfImpact() {
             </div>
           </Reveal>
 
-          <div className="flex-1 w-full space-y-5 md:space-y-6">
+          <div className="flex-1 w-full space-y-6 md:space-y-7">
             {pillars.map((p, i) => {
               const Icon = p.icon;
               return (
                 <Reveal key={i} delay={i * 80}>
-                  <div className="flex gap-3 sm:gap-4">
+                  <div className="flex gap-4 sm:gap-5 group">
                     <div
-                      className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center mt-0.5"
+                      className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mt-1 shadow-md group-hover:shadow-lg transition-shadow"
                       style={{ background: p.color }}
                     >
-                      <Icon size={18} className="text-white" />
+                      <Icon size={20} className="text-white" />
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-xs sm:text-sm font-black uppercase tracking-wide mb-1" style={{ color: p.color }}>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm sm:text-base font-black uppercase tracking-wide mb-2 leading-tight" style={{ color: p.color }}>
                         {p.title}
                       </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">{p.text}</p>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {p.text}
+                      </p>
                     </div>
                   </div>
                 </Reveal>
