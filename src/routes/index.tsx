@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   Leaf,
   Factory,
@@ -21,6 +22,7 @@ import teamBinyam from "@/assets/team-binyam.jpg";
 import teamDaniel from "@/assets/team-daniel.jpg";
 import teamKalayu from "@/assets/team-kalayu.jpg";
 import teamSamuel from "@/assets/team-samuel.jpg";
+import { Reveal } from "@/components/Reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,6 +47,7 @@ export const Route = createFileRoute("/")({
 });
 
 const nav = [
+  { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Values", href: "#values" },
   { label: "Objectives", href: "#objectives" },
@@ -186,6 +189,27 @@ function Logo({ className = "" }: { className?: string }) {
 }
 
 function Index() {
+  const [active, setActive] = useState("#home");
+
+  useEffect(() => {
+    const sections = nav
+      .map((n) => document.querySelector(n.href))
+      .filter((el): el is Element => el !== null);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(`#${visible.target.id}`);
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -193,15 +217,23 @@ function Index() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
           <Logo />
           <nav className="hidden items-center gap-7 md:flex">
-            {nav.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-brand-green-dark"
-              >
-                {n.label}
-              </a>
-            ))}
+            {nav.map((n) => {
+              const isActive = active === n.href;
+              return (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative text-sm font-medium transition-colors hover:text-brand-green-dark after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:rounded-full after:bg-brand-green after:transition-all after:duration-300 ${
+                    isActive
+                      ? "text-brand-green-dark after:w-full"
+                      : "text-muted-foreground after:w-0 hover:after:w-full"
+                  }`}
+                >
+                  {n.label}
+                </a>
+              );
+            })}
           </nav>
           <a
             href="#contact"
@@ -213,7 +245,7 @@ function Index() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section id="home" className="relative overflow-hidden">
         <img
           src={hero}
           alt="Ethiopian smallholder farmers working in green highland fields at golden hour"
@@ -230,9 +262,9 @@ function Index() {
             Bridging the Divide for resilient, self-sustaining communities
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-primary-foreground/85">
-            Future Bridge Development Action is an Ethiopian non-profit connecting
-            vulnerable communities with sustainable economic opportunities,
-            innovation and inclusive, climate-smart development.
+            Future Bridge Development Action is an Ethiopian non-profit connecting vulnerable
+            communities with sustainable economic opportunities, innovation and inclusive,
+            climate-smart development.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
             <a
@@ -252,200 +284,208 @@ function Index() {
       </section>
 
       {/* About */}
-      <section id="about" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
-        <div className="grid gap-12 md:grid-cols-2">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
-              About us
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-              Connecting communities to lasting opportunity
-            </h2>
-            <div className="mt-6 space-y-4 text-muted-foreground">
-              <p>
-                Future Bridge Development Action is an Ethiopian non-profit
-                organization focused on building resilient, self-sustaining, and
-                climate-smart communities. Guided by its mission of "Bridging the
-                Divide," the organization connects vulnerable communities with
-                sustainable economic opportunities, innovation and inclusive
-                development.
+      <Reveal>
+        <section id="about" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <div className="grid gap-12 md:grid-cols-2">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
+                About us
               </p>
-              <p>
-                FBDA supports smallholder farmers, MSMEs, women, youth and
-                underserved groups by promoting sustainable livelihoods, climate
-                resilience, financial inclusion and market access — creating
-                long-term social and economic impact through practical,
-                community-driven solutions.
-              </p>
-              <p>
-                We operate across agriculture, livestock, leather, coffee, cotton
-                and green industrial development, collaborating with government,
-                private-sector partners, cooperatives and development
-                organizations to strengthen inclusive growth in Ethiopia.
-              </p>
+              <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
+                Connecting communities to lasting opportunity
+              </h2>
+              <div className="mt-6 space-y-4 text-muted-foreground">
+                <p>
+                  Future Bridge Development Action is an Ethiopian non-profit organization focused
+                  on building resilient, self-sustaining, and climate-smart communities. Guided by
+                  its mission of "Bridging the Divide," the organization connects vulnerable
+                  communities with sustainable economic opportunities, innovation and inclusive
+                  development.
+                </p>
+                <p>
+                  FBDA supports smallholder farmers, MSMEs, women, youth and underserved groups by
+                  promoting sustainable livelihoods, climate resilience, financial inclusion and
+                  market access — creating long-term social and economic impact through practical,
+                  community-driven solutions.
+                </p>
+                <p>
+                  We operate across agriculture, livestock, leather, coffee, cotton and green
+                  industrial development, collaborating with government, private-sector partners,
+                  cooperatives and development organizations to strengthen inclusive growth in
+                  Ethiopia.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6">
+              <div className="rounded-2xl border border-border bg-card p-8 shadow-soft">
+                <div className="flex items-center gap-3">
+                  <Globe className="h-6 w-6 text-brand-green" />
+                  <h3 className="text-xl font-bold text-brand-green-dark">Vision</h3>
+                </div>
+                <p className="mt-3 text-muted-foreground">
+                  To create a world where inclusive and climate-smart value chains empower
+                  resilient, self-sustaining and prosperous communities.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-gradient-brand p-8 text-primary-foreground shadow-soft">
+                <div className="flex items-center gap-3">
+                  <Target className="h-6 w-6" />
+                  <h3 className="text-xl font-bold">Mission</h3>
+                </div>
+                <p className="mt-3 text-primary-foreground/90">
+                  To drive sustainable economic growth by empowering smallholder producers, workers
+                  and MSMEs through inclusive value chains, localized innovation, financial
+                  inclusion and climate-smart development practices.
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="rounded-2xl border border-border bg-card p-8 shadow-soft">
-              <div className="flex items-center gap-3">
-                <Globe className="h-6 w-6 text-brand-green" />
-                <h3 className="text-xl font-bold text-brand-green-dark">Vision</h3>
-              </div>
-              <p className="mt-3 text-muted-foreground">
-                To create a world where inclusive and climate-smart value chains
-                empower resilient, self-sustaining and prosperous communities.
-              </p>
-            </div>
-            <div className="rounded-2xl bg-gradient-brand p-8 text-primary-foreground shadow-soft">
-              <div className="flex items-center gap-3">
-                <Target className="h-6 w-6" />
-                <h3 className="text-xl font-bold">Mission</h3>
-              </div>
-              <p className="mt-3 text-primary-foreground/90">
-                To drive sustainable economic growth by empowering smallholder
-                producers, workers and MSMEs through inclusive value chains,
-                localized innovation, financial inclusion and climate-smart
-                development practices.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Values */}
-      <section id="values" className="bg-secondary/50 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-5">
-          <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
-              Core values
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-              The principles that guide every partnership
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((v) => (
-              <div
-                key={v.title}
-                className="rounded-2xl border border-border bg-card p-7 shadow-soft transition-transform hover:-translate-y-1"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
-                  <v.icon className="h-6 w-6" />
+      <Reveal>
+        <section id="values" className="bg-secondary/50 py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="max-w-2xl">
+              <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
+                Core values
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
+                The principles that guide every partnership
+              </h2>
+            </div>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {values.map((v) => (
+                <div
+                  key={v.title}
+                  className="rounded-2xl border border-border bg-card p-7 shadow-soft transition-transform hover:-translate-y-1"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
+                    <v.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-bold text-foreground">{v.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{v.body}</p>
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-foreground">{v.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{v.body}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Objectives */}
-      <section id="objectives" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
-        <div className="max-w-2xl">
-          <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
-            Strategic objectives
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-            Where we focus our energy
-          </h2>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {objectives.map((o) => (
-            <div
-              key={o.title}
-              className="flex gap-5 rounded-2xl border border-border bg-card p-7 shadow-soft"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/20 text-brand-amber">
-                <o.icon className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-foreground">{o.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{o.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Pillars */}
-      <section id="impact" className="bg-brand-green-dark py-20 text-primary-foreground md:py-28">
-        <div className="mx-auto max-w-6xl px-5">
+      <Reveal>
+        <section id="objectives" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
           <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-widest text-brand-yellow">
-              Pillars of impact
+            <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
+              Strategic objectives
             </p>
-            <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
-              Five pillars driving sustainable change
+            <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
+              Where we focus our energy
             </h2>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((p) => (
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {objectives.map((o) => (
               <div
-                key={p.title}
-                className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-7 backdrop-blur transition-colors hover:bg-primary-foreground/10"
+                key={o.title}
+                className="flex gap-5 rounded-2xl border border-border bg-card p-7 shadow-soft"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-brand-green-dark">
-                  <p.icon className="h-6 w-6" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/20 text-brand-amber">
+                  <o.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-5 text-lg font-bold">{p.title}</h3>
-                <p className="mt-2 text-sm text-primary-foreground/80">{p.body}</p>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">{o.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{o.body}</p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
+
+      {/* Pillars */}
+      <Reveal>
+        <section id="impact" className="bg-brand-green-dark py-20 text-primary-foreground md:py-28">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="max-w-2xl">
+              <p className="text-sm font-bold uppercase tracking-widest text-brand-yellow">
+                Pillars of impact
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
+                Five pillars driving sustainable change
+              </h2>
+            </div>
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {pillars.map((p) => (
+                <div
+                  key={p.title}
+                  className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-7 backdrop-blur transition-colors hover:bg-primary-foreground/10"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-brand-green-dark">
+                    <p.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-bold">{p.title}</h3>
+                  <p className="mt-2 text-sm text-primary-foreground/80">{p.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </Reveal>
 
       {/* Team */}
-      <section id="team" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
-        <div className="max-w-2xl">
-          <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
-            Meet the team
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
-            Experienced leaders, deep local roots
-          </h2>
-        </div>
-        <div className="mt-12 grid gap-8 sm:grid-cols-2">
-          {team.map((m) => (
-            <article
-              key={m.name}
-              className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
-            >
-              <div className="flex flex-col sm:flex-row">
-                <div className="relative bg-secondary/60 sm:w-2/5">
-                  <img
-                    src={m.img}
-                    alt={`Portrait of ${m.name}`}
-                    loading="lazy"
-                    className="h-64 w-full object-cover object-top sm:h-full"
-                  />
+      <Reveal>
+        <section id="team" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <div className="max-w-2xl">
+            <p className="text-sm font-bold uppercase tracking-widest text-brand-amber">
+              Meet the team
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold text-foreground md:text-4xl">
+              Experienced leaders, deep local roots
+            </h2>
+          </div>
+          <div className="mt-12 grid gap-8 sm:grid-cols-2">
+            {team.map((m) => (
+              <article
+                key={m.name}
+                className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
+              >
+                <div className="flex flex-col sm:flex-row">
+                  <div className="relative bg-secondary/60 sm:w-2/5">
+                    <img
+                      src={m.img}
+                      alt={`Portrait of ${m.name}`}
+                      loading="lazy"
+                      className="h-64 w-full object-cover object-top sm:h-full"
+                    />
+                  </div>
+                  <div className="p-6 sm:w-3/5">
+                    <h3 className="text-lg font-extrabold text-foreground">{m.name}</h3>
+                    <p className="text-sm font-semibold text-brand-green">{m.role}</p>
+                    <p className="mt-3 text-sm text-muted-foreground">{m.bio}</p>
+                  </div>
                 </div>
-                <div className="p-6 sm:w-3/5">
-                  <h3 className="text-lg font-extrabold text-foreground">{m.name}</h3>
-                  <p className="text-sm font-semibold text-brand-green">{m.role}</p>
-                  <p className="mt-3 text-sm text-muted-foreground">{m.bio}</p>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+              </article>
+            ))}
+          </div>
+        </section>
+      </Reveal>
 
       {/* Closing CTA */}
-      <section className="bg-secondary/50 py-20 md:py-24">
-        <div className="mx-auto max-w-4xl px-5 text-center">
-          <h2 className="text-3xl font-extrabold text-foreground md:text-4xl">
-            We at Future Bridge Development Action
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-muted-foreground">
-            We believe every community deserves the opportunity to grow, succeed
-            and build a better future. By working together with communities and
-            partners, we aim to create lasting change, protect natural resources
-            and build hope for future generations.
-          </p>
-        </div>
-      </section>
+      <Reveal>
+        <section className="bg-secondary/50 py-20 md:py-24">
+          <div className="mx-auto max-w-4xl px-5 text-center">
+            <h2 className="text-3xl font-extrabold text-foreground md:text-4xl">
+              We at Future Bridge Development Action
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-muted-foreground">
+              We believe every community deserves the opportunity to grow, succeed and build a
+              better future. By working together with communities and partners, we aim to create
+              lasting change, protect natural resources and build hope for future generations.
+            </p>
+          </div>
+        </section>
+      </Reveal>
 
       {/* Contact / Footer */}
       <footer id="contact" className="bg-brand-green-dark text-primary-foreground">
@@ -454,15 +494,20 @@ function Index() {
             <div>
               <h2 className="text-2xl font-extrabold">Contact us</h2>
               <p className="mt-3 max-w-md text-primary-foreground/80">
-                Reach out to partner with us or learn more about our programs
-                across Ethiopia.
+                Reach out to partner with us or learn more about our programs across Ethiopia.
               </p>
             </div>
             <div className="flex flex-col gap-4">
-              <a href="tel:+251912038304" className="flex items-center gap-3 hover:text-brand-yellow">
+              <a
+                href="tel:+251912038304"
+                className="flex items-center gap-3 hover:text-brand-yellow"
+              >
                 <Phone className="h-5 w-5 text-brand-yellow" /> +251 912 038 304
               </a>
-              <a href="mailto:info@futurebridgeda.org" className="flex items-center gap-3 hover:text-brand-yellow">
+              <a
+                href="mailto:info@futurebridgeda.org"
+                className="flex items-center gap-3 hover:text-brand-yellow"
+              >
                 <Mail className="h-5 w-5 text-brand-yellow" /> info@futurebridgeda.org
               </a>
               <a
@@ -477,7 +522,9 @@ function Index() {
           </div>
           <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/15 pt-6 text-sm text-primary-foreground/70 sm:flex-row">
             <span className="font-bold tracking-tight">FUTURE BRIDGE DEVELOPMENT ACTION</span>
-            <span>© {new Date().getFullYear()} Future Bridge Development Action. All rights reserved.</span>
+            <span>
+              © {new Date().getFullYear()} Future Bridge Development Action. All rights reserved.
+            </span>
           </div>
         </div>
       </footer>
