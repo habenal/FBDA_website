@@ -46,63 +46,66 @@ export default function Contact() {
   return (
     <section id="contact" className="relative overflow-hidden">
       {/* White top — logo + brand */}
-      <div className="bg-white py-12 md:py-16 px-6 sm:px-8 flex flex-col items-center gap-5 relative overflow-hidden">
+      <div className="bg-white py-16 md:py-24 px-6 sm:px-8 flex flex-col items-center gap-8 relative overflow-hidden">
         <div
-          className="absolute top-0 left-0 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-15"
+          className="absolute top-0 left-0 w-24 h-24 sm:w-32 sm:h-32 pointer-events-none opacity-10"
           aria-hidden="true"
           style={{ background: '#E8A800', clipPath: 'polygon(0 0, 100% 0, 0 100%)' }}
         />
         <div
-          className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-15"
+          className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 pointer-events-none opacity-10"
           aria-hidden="true"
           style={{ background: '#6B9C1F', clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
         />
 
         <div className="relative z-10">
-          <svg viewBox="0 0 200 80" className="w-40 sm:w-48 md:w-56 h-auto">
+          <svg viewBox="0 0 200 80" className="w-48 sm:w-56 md:w-64 h-auto">
             <path d="M10 75 Q100 8 190 75" fill="none" stroke="#6B9C1F" strokeWidth="14" strokeLinecap="round" />
             <path d="M32 75 Q100 22 168 75" fill="none" stroke="#E8A800" strokeWidth="5" strokeLinecap="round" />
           </svg>
         </div>
 
         <div className="text-center relative z-10">
-          <div className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide" style={{ color: '#6B9C1F' }}>
+          <div className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-wide leading-tight" style={{ color: '#6B9C1F' }}>
             Future Bridge
           </div>
-          <div className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mt-1" style={{ color: '#E8A800' }}>
+          <div className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase mt-2" style={{ color: '#E8A800' }}>
             Development Action
           </div>
         </div>
       </div>
 
       {/* Gold divider */}
-      <div className="h-1 w-full" style={{ background: '#E8A800' }} />
+      <div className="h-1.5 w-full" style={{ background: '#E8A800' }} />
 
       {/* Green band — info + form */}
-      <div className="relative py-12 md:py-16 px-6 sm:px-8 overflow-hidden" style={{ background: '#6B9C1F' }}>
+      <div className="relative py-16 md:py-24 px-6 sm:px-8 overflow-hidden" style={{ background: '#6B9C1F' }}>
         <div
-          className="absolute top-0 right-0 w-24 h-24 sm:w-36 sm:h-36 pointer-events-none"
+          className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 pointer-events-none opacity-20"
           aria-hidden="true"
-          style={{ background: 'rgba(0,0,0,0.08)', clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+          style={{ background: 'rgba(0,0,0,0.1)', clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
         />
         <div
-          className="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 pointer-events-none"
+          className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 pointer-events-none opacity-20"
           aria-hidden="true"
-          style={{ background: 'rgba(232,168,0,0.2)', clipPath: 'polygon(0 100%, 100% 100%, 0 0)' }}
+          style={{ background: 'rgba(232,168,0,0.25)', clipPath: 'polygon(0 100%, 100% 100%, 0 0)' }}
         />
 
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight text-center mb-10 md:mb-12">
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight text-center mb-4 leading-tight">
             Contact Us
           </h2>
+          <div className="flex justify-center mb-12 md:mb-16">
+            <div className="h-1.5 w-16" style={{ background: '#E8A800' }} />
+          </div>
 
-          <div className="grid md:grid-cols-[1fr_1.4fr] gap-8 md:gap-12 items-start">
+          <div className="grid md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12 items-start">
             {/* Contact info */}
-            <div className="space-y-6">
-              <p className="text-white/80 text-sm leading-relaxed">
-                Reach out to us — we'd love to hear from you. Whether you're a partner, donor, or community member, our team is ready to connect.
+            <div className="space-y-8">
+              <p className="text-white text-base leading-relaxed font-medium">
+                Reach out to us — we&apos;d love to hear from you. Whether you&apos;re a partner, donor, or community member, our team is ready to connect.
               </p>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <ContactItem icon={Phone} text="+251 912 038 304" />
                 <ContactItem icon={Mail} text="info@futurebridgeda.org" />
                 <ContactItem icon={Globe} text="www.futurebridgeda.com" />
@@ -110,12 +113,12 @@ export default function Contact() {
             </div>
 
             {/* Form card */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
               {status === 'success' ? (
                 <SuccessBanner onReset={() => setStatus('idle')} />
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="grid sm:grid-cols-2 gap-5">
                     <Field
                       label="Full Name"
                       name="name"
@@ -139,7 +142,7 @@ export default function Contact() {
                     label="Phone Number"
                     name="phone"
                     type="tel"
-                    placeholder="+251 … (optional)"
+                    placeholder="+251 ... (optional)"
                     value={form.phone}
                     onChange={handleChange}
                   />
@@ -192,8 +195,9 @@ export default function Contact() {
       </div>
 
       {/* Footer strip */}
-      <div className="bg-gray-900 py-4 sm:py-5 px-6 text-center">
-        <p className="text-gray-500 text-xs tracking-widest uppercase">
+      <div className="bg-gray-950 py-6 sm:py-8 px-6 text-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5" style={{ background: 'linear-gradient(135deg, #6B9C1F, #E8A800)' }} />
+        <p className="text-gray-400 text-xs tracking-widest uppercase font-semibold relative z-10">
           &copy; 2026 Future Bridge Development Action. All rights reserved.
         </p>
       </div>

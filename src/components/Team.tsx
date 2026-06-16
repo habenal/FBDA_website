@@ -45,44 +45,54 @@ const members = [
 
 export default function Team() {
   return (
-    <section id="team" className="bg-gray-50 py-20 md:py-24">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="flex items-center gap-4 mb-10 md:mb-14">
-          <div className="px-5 py-2.5 rounded-lg" style={{ background: '#6B9C1F' }}>
-            <span className="text-white text-sm font-bold uppercase tracking-widest">
-              Meet The Team
-            </span>
+    <section id="team" className="bg-gray-50 py-24 md:py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="text-center mb-14 md:mb-20">
+          <div className="inline-block mb-6">
+            <div className="px-6 py-3 rounded-full" style={{ background: '#6B9C1F' }}>
+              <span className="text-white text-xs font-black uppercase tracking-widest">
+                Meet The Team
+              </span>
+            </div>
+          </div>
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 uppercase tracking-tight leading-tight mb-4">
+            Leadership
+          </h2>
+          <div className="flex justify-center">
+            <div className="h-1.5 w-16" style={{ background: '#E8A800' }} />
           </div>
         </div>
 
         <div className="space-y-10 md:space-y-14">
           {members.map((m, i) => (
             <Reveal key={i} delay={i * 60}>
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden grid md:grid-cols-[260px_1fr] lg:grid-cols-[300px_1fr]">
+              <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl overflow-hidden grid md:grid-cols-[320px_1fr] lg:grid-cols-[360px_1fr] transition-shadow">
                 {/* Photo column */}
-                <div className="relative bg-gray-100 h-64 sm:h-72 md:h-auto">
+                <div className="relative bg-gray-100 h-72 sm:h-80 md:h-auto overflow-hidden">
                   <img
                     src={m.photo}
                     alt={m.name}
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
                   <div
-                    className="absolute bottom-0 left-0 w-16 h-16 sm:w-20 sm:h-20"
+                    className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24"
                     style={{ background: '#E8A800', clipPath: 'polygon(0 100%, 100% 100%, 0 0)' }}
                   />
                 </div>
 
                 {/* Content column */}
-                <div className="p-6 sm:p-8 md:p-10">
-                  <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-wide" style={{ color: '#6B9C1F' }}>
-                    {m.name}
-                  </h3>
-                  <p className="font-semibold text-xs sm:text-sm uppercase tracking-widest mt-1 mb-5" style={{ color: '#E8A800' }}>
-                    {m.title}
-                  </p>
-                  <div className="space-y-3 sm:space-y-4">
+                <div className="p-8 sm:p-10 md:p-12 flex flex-col justify-center">
+                  <div className="mb-6">
+                    <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-wide leading-tight mb-2" style={{ color: '#6B9C1F' }}>
+                      {m.name}
+                    </h3>
+                    <p className="font-bold text-xs uppercase tracking-widest px-4 py-2 rounded-lg inline-block" style={{ background: '#E8A800', color: 'white' }}>
+                      {m.title}
+                    </p>
+                  </div>
+                  <div className="space-y-4">
                     {m.bio.map((para, j) => (
-                      <p key={j} className="text-gray-600 text-sm leading-relaxed md:text-justify">
+                      <p key={j} className="text-gray-700 text-base leading-relaxed">
                         {para}
                       </p>
                     ))}
