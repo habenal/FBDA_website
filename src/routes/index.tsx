@@ -23,6 +23,7 @@ import teamDaniel from "@/assets/team-daniel.jpg";
 import teamKalayu from "@/assets/team-kalayu.jpg";
 import teamSamuel from "@/assets/team-samuel.jpg";
 import { Reveal } from "@/components/Reveal";
+import { useSectionTransition } from "@/components/useSectionTransition";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -190,6 +191,7 @@ function Logo({ className = "" }: { className?: string }) {
 
 function Index() {
   const [active, setActive] = useState("#home");
+  const { overlay, handleAnchorClick } = useSectionTransition();
 
   useEffect(() => {
     const sections = nav
@@ -211,7 +213,8 @@ function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" onClick={handleAnchorClick}>
+      {overlay}
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
