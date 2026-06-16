@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MenuIcon, CloseIcon } from './Icon';
 
 const navLinks = [
+  { label: 'Home', href: '#hero' },
   { label: 'About Us', href: '#about' },
   { label: 'Core Values', href: '#values' },
   { label: 'Objectives', href: '#objectives' },
@@ -13,11 +14,32 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState('#hero');
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
+    handler();
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  useEffect(() => {
+    const sections = navLinks
+      .map((l) => document.querySelector(l.href))
+      .filter((el): el is Element => el !== null);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(`#${visible.target.id}`);
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -48,18 +70,22 @@ export default function Navbar() {
         </a>
 
         <ul className="hidden md:flex items-center gap-6">
-          {navLinks.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className={`text-sm font-bold tracking-wide uppercase transition-colors hover:text-gold-brand ${
-                  scrolled ? 'text-gray-700' : 'text-white'
-                }`}
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
+          {navLinks.map((l) => {
+            const isActive = active === l.href;
+            return (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`relative text-sm font-bold tracking-wide uppercase transition-colors hover:text-gold-brand after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-gold-brand after:transition-all after:duration-300 ${
+                    isActive ? 'text-gold-brand after:w-full' : 'after:w-0 hover:after:w-full'
+                  } ${scrolled ? 'text-gray-700' : 'text-white'}`}
+                >
+                  {l.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         <button
@@ -68,30 +94,35 @@ export default function Navbar() {
           aria-label="Toggle menu"
         >
           {open ? (
-            <X className={scrolled ? 'text-gray-700' : 'text-white'} size={24} />
+            <CloseIcon className={scrolled ? 'text-gray-700' : 'text-white'} size={24} />
           ) : (
-            <Menu className={scrolled ? 'text-gray-700' : 'text-white'} size={24} />
+            <MenuIcon className={scrolled ? 'text-gray-700' : 'text-white'} size={24} />
           )}
         </button>
       </div>
 
-      {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4">
-          <ul className="flex flex-col gap-4">
-            {navLinks.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="text-sm font-bold tracking-wide uppercase text-gray-700 hover:text-gold-brand"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div
+        className={`md:hidden overflow-hidden bg-white border-t border-gray-100 transition-all duration-300 ease-out ${
+          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 border-t-0'
+        }`}
+      >
+        <ul className="flex flex-col gap-4 px-6 py-4">
+          {navLinks.map((l) => (
+            <li key={l.href}>
+              <a
+                href={l.href}
+                onClick={() => setOpen(false)}
+                aria-current={active === l.href ? 'page' : undefined}
+                className={`text-sm font-bold tracking-wide uppercase transition-colors hover:text-gold-brand ${
+                  active === l.href ? 'text-gold-brand' : 'text-gray-700'
+                }`}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 }

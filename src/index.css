@@ -6,7 +6,45 @@
   * {
     box-sizing: border-box;
   }
+  html {
+    scroll-behavior: smooth;
+    /* offset anchored sections so the fixed navbar doesn't cover them */
+    scroll-padding-top: 4rem;
+  }
   body {
     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Initial page-load entrance */
+  .page-enter {
+    animation: page-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .page-enter {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

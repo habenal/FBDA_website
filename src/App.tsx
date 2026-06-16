@@ -11,15 +11,15 @@ import Reveal from './components/Reveal';
 
 export default function App() {
   return (
-    <div className="font-sans">
+    <div className="font-sans page-enter">
       <Navbar />
       <Hero />
       <Reveal><About /></Reveal>
-      <Reveal><CoreValues /></Reveal>
+      <Reveal delay={60}><CoreValues /></Reveal>
       <Reveal><StrategicObjectives /></Reveal>
-      <Reveal><PillarsOfImpact /></Reveal>
+      <Reveal delay={60}><PillarsOfImpact /></Reveal>
       <Reveal><Team /></Reveal>
-      <Reveal><Statement /></Reveal>
+      <Reveal delay={60}><Statement /></Reveal>
       <Reveal><Contact /></Reveal>
     </div>
   );
